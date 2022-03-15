@@ -102,30 +102,32 @@ export default class ProfilerStore extends EventEmitter<{|
   }
 
   getCommitData(rootID: number, commitIndex: number): CommitDataFrontend {
-    if (this._dataFrontend !== null) {
-      const dataForRoot = this._dataFrontend.dataForRoots.get(rootID);
-      if (dataForRoot != null) {
-        const commitDatum = dataForRoot.commitData[commitIndex];
-        if (commitDatum != null) {
-          return commitDatum;
+    try{
+      if (this._dataFrontend !== null) {
+        const dataForRoot = this._dataFrontend.dataForRoots.get(rootID);
+        if (dataForRoot != null) {
+          const commitDatum = dataForRoot.commitData[commitIndex];
+          if (commitDatum != null) {
+            return commitDatum;
+          }
         }
       }
+    } catch {
+      return `Could not find commit data for root "${rootID}" and commit "${commitIndex}"`;
     }
-
-    throw Error(
-      `Could not find commit data for root "${rootID}" and commit "${commitIndex}"`,
-    );
   }
 
   getDataForRoot(rootID: number): ProfilingDataForRootFrontend {
-    if (this._dataFrontend !== null) {
-      const dataForRoot = this._dataFrontend.dataForRoots.get(rootID);
-      if (dataForRoot != null) {
-        return dataForRoot;
+    try{
+      if (this._dataFrontend !== null) {
+        const dataForRoot = this._dataFrontend.dataForRoots.get(rootID);
+        if (dataForRoot != null) {
+          return dataForRoot;
+        }
       }
+    } catch {
+      return `Could not find commit data for root "${rootID}"`;
     }
-
-    throw Error(`Could not find commit data for root "${rootID}"`);
   }
 
   // Profiling data has been recorded for at least one root.

@@ -9,18 +9,19 @@ const IS_CHROME = IS_EDGE === false && IS_FIREFOX === false;
 export type BrowserName = 'Chrome' | 'Firefox' | 'Edge';
 
 export function getBrowserName(): BrowserName {
-  if (IS_EDGE) {
-    return 'Edge';
+  let selectedBrowserName;
+  try {
+    if (IS_EDGE) {
+      selectedBrowserName = 'Edge';
+    } else if (IS_FIREFOX) {
+      selectedBrowserName = 'Firefox';
+    } else {
+      selectedBrowserName = 'Chrome';
+    }
+    return selectedBrowserName;
+  } catch {
+    return 'Expected browser name to be one of Chrome, Edge or Firefox.';
   }
-  if (IS_FIREFOX) {
-    return 'Firefox';
-  }
-  if (IS_CHROME) {
-    return 'Chrome';
-  }
-  throw new Error(
-    'Expected browser name to be one of Chrome, Edge or Firefox.',
-  );
 }
 
 export function getBrowserTheme(): BrowserTheme {

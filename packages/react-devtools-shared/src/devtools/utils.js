@@ -13,7 +13,7 @@ import type {Element} from './views/Components/types';
 import type {StateContext} from './views/Components/TreeContext';
 import type Store from './store';
 
-export function printElement(element: Element, includeWeight: boolean = false) {
+export function printReactComponentElement(element: Element, includeWeight: boolean = false) {
   let prefix = ' ';
   if (element.children.length > 0) {
     prefix = element.isCollapsed ? '▸' : '▾';
@@ -46,7 +46,7 @@ export function printOwnersList(
   includeWeight: boolean = false,
 ) {
   return elements
-    .map(element => printElement(element, includeWeight))
+    .map(element => printReactComponentElement(element, includeWeight))
     .join('\n');
 }
 
@@ -84,7 +84,7 @@ export function printStore(
     );
     ownerFlatTree.forEach((element, index) => {
       const printedSelectedMarker = printSelectedMarker(index);
-      const printedElement = printElement(element, false);
+      const printedElement = printReactComponentElement(element, false);
       const printedErrorsAndWarnings = printErrorsAndWarnings(element);
       snapshotLines.push(
         `${printedSelectedMarker}${printedElement}${printedErrorsAndWarnings}`,
@@ -118,7 +118,7 @@ export function printStore(
         }
 
         const printedSelectedMarker = printSelectedMarker(i);
-        const printedElement = printElement(element, includeWeight);
+        const printedElement = printReactComponentElement(element, includeWeight);
         const printedErrorsAndWarnings = printErrorsAndWarnings(element);
         snapshotLines.push(
           `${printedSelectedMarker}${printedElement}${printedErrorsAndWarnings}`,
@@ -147,7 +147,7 @@ export function printStore(
 // e.g. 'foo' is not valid JSON but it is a valid string
 // so this method replaces e.g. 'foo' with "foo"
 export function sanitizeForParse(value: any) {
-  if (typeof value === 'string') {
+  if (isStringType(value)) {
     if (
       value.length >= 2 &&
       value.charAt(0) === "'" &&
@@ -157,6 +157,10 @@ export function sanitizeForParse(value: any) {
     }
   }
   return value;
+}
+
+function isStringType(val) {
+  return typeof val === 'string';
 }
 
 export function smartParse(value: any) {
